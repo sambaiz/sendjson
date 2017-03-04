@@ -118,8 +118,12 @@ func (in Input) evalTimeFormat() (interface{}, bool) {
 
 	switch in.TimeFormat {
 	case "unix_epoch":
-		return time.Now().Unix(), true
+		return now().Unix(), true
 	default:
-		return time.Now().Format(in.TimeFormat), true
+		return now().Format(in.TimeFormat), true
 	}
+}
+
+var now = func() time.Time {
+	return time.Now()
 }

@@ -2,6 +2,7 @@ package input
 
 import "testing"
 import "fmt"
+import "time"
 
 type TestCase struct {
 	input   Input
@@ -72,11 +73,11 @@ func TestEval(t *testing.T) {
 		TestCase{
 			input: Input{
 				Type:       "time",
-				TimeFormat: "2006-01-02T15:04:05Z07:00",
+				TimeFormat: "2006-01-02T15:04:05",
 			},
 			success: func(v interface{}) bool {
-				num := v.(int)
-				return num >= -1 && num <= 1
+				str := v.(string)
+				return str == "2017-03-04T01:02:03"
 			},
 		},
 
@@ -86,10 +87,14 @@ func TestEval(t *testing.T) {
 				TimeFormat: "unix_epoch",
 			},
 			success: func(v interface{}) bool {
-				num := v.(int)
-				return num >= -1 && num <= 1
+				num := v.(int64)
+				return num == 1488556923
 			},
 		},
+	}
+
+	now = func() time.Time {
+		return time.Date(2017, 3, 4, 1, 2, 3, 0, time.Local)
 	}
 
 	for i, in := range inputs {
