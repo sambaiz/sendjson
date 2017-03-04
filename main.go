@@ -21,6 +21,14 @@ func main() {
 	)
 
 	app := cli.NewApp()
+	app.Name = "sendjson"
+	app.Usage = "generate and send json continuously"
+	app.Version = "0.5.0"
+	app.Authors = []cli.Author{
+		cli.Author{
+			Name: "sambaiz",
+		},
+	}
 
 	app.Flags = []cli.Flag{
 		cli.DurationFlag{
