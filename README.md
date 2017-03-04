@@ -41,4 +41,4 @@ not sended: {"aaa":"foo","bbb":true,"ccc":413,"ddd":0.8132848145773628,"timestam
 
 ## article
 
-[一定間隔でjsonデータを作って送り続けるCLIツールをGoで作った](http://sambaiz.net/article/76/)
+[一定間隔でjsonデータを作って送り続けるCLIツールを作った](http://sambaiz.net/article/76/)
