@@ -2,7 +2,7 @@
 
 ```
 $ go install github.com/sambaiz/sendjson
-$ sendjson -i 0.5 '{"a": {"type": "integer", "min": 10, "max": 100}}'
+$ sendjson -i 0.5 -u http://localhost:9200/hoge '{"a": {"type": "integer", "min": 10, "max": 100}}'
 {"a":27}
 {"a":99}
 {"a":98}
