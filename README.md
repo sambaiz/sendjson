@@ -15,7 +15,9 @@ $ sendjson -i 2s -u http://localhost:9200/hoge '{"a": {"type": "integer", "min":
 
 ## Format
 
-- not yet supported nested json
+`--check`: for checking output without sending
+
+- not yet support nested json
 
 ```
 $ sendjson --check '
@@ -36,3 +38,7 @@ not sended: {"aaa":"foo","bbb":false,"ccc":996,"ddd":0.85358913945103,"timestamp
 not sended: {"aaa":"foo","bbb":true,"ccc":413,"ddd":0.8132848145773628,"timestamp":"2017-03-04T21:22:42+09:00","unixtime":1488630162}
 ...
 ```
+
+## article
+
+[一定間隔でjsonデータを作って送り続けるCLIツールをGoで作った](http://sambaiz.net/article/76/)

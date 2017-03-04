@@ -1,15 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"time"
-
-	"encoding/json"
-
-	"net/http"
-
-	"bytes"
 
 	"github.com/sambaiz/sendjson/input"
 	"github.com/urfave/cli"
@@ -51,7 +49,7 @@ func main() {
 		},
 		cli.BoolFlag{
 			Name:        "check",
-			Usage:       "not send, only check output",
+			Usage:       "for checking output without sending",
 			Destination: &check,
 		},
 	}
@@ -127,6 +125,15 @@ func send(method, url string, data []byte) error {
 		return err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode/100 != 2 {
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return err
+		} else {
+			fmt.Printf("[send error] status code: %d, response: %s\n", res.StatusCode, string(body))
+		}
+	}
 
 	return nil
 }
