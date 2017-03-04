@@ -1,5 +1,7 @@
 # sendjson
 
+CLI tool to generate and send json continuously
+
 ```
 $ go install github.com/sambaiz/sendjson
 $ sendjson --help
@@ -12,8 +14,6 @@ $ sendjson -i 2s -u http://localhost:9200/hoge '{"a": {"type": "integer", "min":
 ```
 
 ## Format
-
-Input
 
 - not yet supported nested json
 
@@ -28,8 +28,6 @@ $ sendjson --check '
     "unixtime": {"type": "time", "time_format": "unix_epoch"}
 }'
 ```
-
-Output
 
 ```
 not sended: {"aaa":"foo","bbb":true,"ccc":436,"ddd":0.9866222922441757,"timestamp":"2017-03-04T21:22:39+09:00","unixtime":1488630159}
