@@ -67,6 +67,29 @@ func TestEval(t *testing.T) {
 				return num >= -1 && num <= 1
 			},
 		},
+
+		// Time
+		TestCase{
+			input: Input{
+				Type:       "time",
+				TimeFormat: "2006-01-02T15:04:05Z07:00",
+			},
+			success: func(v interface{}) bool {
+				num := v.(int)
+				return num >= -1 && num <= 1
+			},
+		},
+
+		TestCase{
+			input: Input{
+				Type:       "time",
+				TimeFormat: "unix_epoch",
+			},
+			success: func(v interface{}) bool {
+				num := v.(int)
+				return num >= -1 && num <= 1
+			},
+		},
 	}
 
 	for i, in := range inputs {

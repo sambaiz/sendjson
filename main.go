@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"os"
 	"time"
 
@@ -18,23 +17,24 @@ import (
 
 func main() {
 	var (
-		interval, duration float64
+		interval, duration time.Duration
 		url, method        string
+		check              bool
 	)
 
 	app := cli.NewApp()
 
 	app.Flags = []cli.Flag{
-		cli.Float64Flag{
+		cli.DurationFlag{
 			Name:        "interval, i",
-			Value:       1,
-			Usage:       "send interval(sec)",
+			Value:       1 * time.Second,
+			Usage:       "send interval",
 			Destination: &interval,
 		},
-		cli.Float64Flag{
+		cli.DurationFlag{
 			Name:        "duration, d",
-			Value:       -1,
-			Usage:       "send duration(sec), -1 is infinity",
+			Value:       60 * time.Second,
+			Usage:       "send duration",
 			Destination: &duration,
 		},
 		cli.StringFlag{
@@ -49,6 +49,11 @@ func main() {
 			Usage:       "send method; POST, PUT etc.",
 			Destination: &method,
 		},
+		cli.BoolFlag{
+			Name:        "check",
+			Usage:       "not send, only check output",
+			Destination: &check,
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
@@ -60,7 +65,7 @@ func main() {
 			panic("json input required")
 		}
 
-		ticker := time.NewTicker(time.Duration(interval*math.Pow(10, 9)) * time.Nanosecond)
+		ticker := time.NewTicker(interval)
 
 		go func() {
 			for {
@@ -69,24 +74,19 @@ func main() {
 					go func() {
 						if b, err := generateJSON([]byte(input)); err != nil {
 							panic(err)
+						} else if check {
+							fmt.Printf("not sended: %v\n", string(b))
 						} else if err := send(method, url, b); err != nil {
 							panic(err)
 						} else {
-							fmt.Sprintf("sended: %v", string(b))
+							fmt.Printf("%v\n", string(b))
 						}
 					}()
 				}
 			}
 		}()
 
-		if duration != -1 {
-			time.Sleep(time.Duration(duration*math.Pow(10, 9)) * time.Nanosecond)
-		} else {
-			// infinity
-			for {
-			}
-		}
-
+		time.Sleep(duration)
 		ticker.Stop()
 		return nil
 	}
@@ -112,7 +112,6 @@ func generateJSON(inbyte []byte) ([]byte, error) {
 	}
 
 	outbyte, err := json.Marshal(output)
-	fmt.Println(string(outbyte))
 	return outbyte, err
 }
 

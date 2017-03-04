@@ -11,11 +11,12 @@ func init() {
 }
 
 type Input struct {
-	Type  string        `json:"type"`  // string, boolean, integer or double
-	Value interface{}   `json:"value"` // fixed value
-	Or    []interface{} `json:"or"`    // randomly selected
-	Max   *float64      `json:"max"`   // range, ignored except for integer and double
-	Min   *float64      `json:"min"`
+	Type       string        `json:"type"`  // string, boolean, integer, double, or time
+	Value      interface{}   `json:"value"` // fixed value
+	Or         []interface{} `json:"or"`    // randomly selected
+	Max        *float64      `json:"max"`   // range, ignored except for integer and double
+	Min        *float64      `json:"min"`
+	TimeFormat string        `json:"time_format"` // time string or unix_epoch, ignored except for time
 }
 
 // eval input then return value
@@ -25,6 +26,7 @@ func (in Input) Eval() interface{} {
 		in.evalValue,
 		in.evalOr,
 		in.evalRange,
+		in.evalTimeFormat,
 	}
 
 	for _, ev := range evals {
@@ -106,4 +108,18 @@ func (in Input) evalRange() (interface{}, bool) {
 	}
 
 	return nil, false
+}
+
+func (in Input) evalTimeFormat() (interface{}, bool) {
+
+	if in.TimeFormat == "" {
+		return nil, false
+	}
+
+	switch in.TimeFormat {
+	case "unix_epoch":
+		return time.Now().Unix(), true
+	default:
+		return time.Now().Format(in.TimeFormat), true
+	}
 }
